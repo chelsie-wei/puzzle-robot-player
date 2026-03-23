@@ -1,6 +1,6 @@
 # Puzzle Robot Player
 repository created for cs150 - introduction to ROS  
-Initial implementation: 
+Initial implementation: 11d567c521
 
 ## Description
 This is a project and repo created for cs150 intro to ROS at Tufts University. It currently contains only a bare skeleton of the final result :(, which should ultimately be code that enables a robot arm to complete an entire jigsaw puzzle from start to finish, possibly with assistance from a human arm as well.
