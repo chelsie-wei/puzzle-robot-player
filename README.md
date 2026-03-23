@@ -3,7 +3,7 @@ repository created for cs150 - introduction to ROS
 Initial implementation: 
 
 ## Description
-This is a project and repo created for cs150 intro to ROS at Tufts University. It currently contains barely a skeleton of the final result :(, which should be code that could make a robot arm complete a complete set of jigsaw puzzle from start to finish, maybe with help from a human arm as well.
+This is a project and repo created for cs150 intro to ROS at Tufts University. It currently contains only a bare skeleton of the final result :(, which should ultimately be code that enables a robot arm to complete an entire jigsaw puzzle from start to finish, possibly with assistance from a human arm as well.
 
 ## Deployment
 
