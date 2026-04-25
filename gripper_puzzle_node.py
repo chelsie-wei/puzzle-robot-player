@@ -2,7 +2,10 @@
 # gripper puzzle node.py
 # 
 # Incorporates: MoveIt2, wrappers (pymoveit2)
-# Sources: modified from pymoveit2 source code example on gripper action
+# Sources: modified from pymoveit2 source code example on gripper & arm action
+#
+# TODO : specify gripper movements with appropraite puzzle size
+# TODO: without utilizing grippers, focus on arm movements
 
 from threading import Thread
 import time
@@ -11,7 +14,7 @@ import rclpy
 from rclpy.callback_groups import ReentrantCallbackGroup
 from rclpy.node import Node
 
-from pymoveit2 import GripperInterface
+from pymoveit2 import GripperInterface, MoveIt2, MoveIt2State
 from pymoveit2.robots import panda as robot
 
 class PuzzlePieceGripperNode(Node):
@@ -20,6 +23,16 @@ class PuzzlePieceGripperNode(Node):
 
         # callback group
         self.callback_group = ReentrantCallbackGroup()
+
+        # moveit2 interface (arm)
+        self.moveit2 = MoveIt2(
+            node=self,
+            joint_names=robot.joint_names(),
+            base_link_name=robot.base_link_name(),
+            end_effector_name=robot.end_effector_name(),
+            group_name=robot.MOVE_GROUP_ARM,
+            callback_group=self.callback_group,
+        )
 
         # gripper interface
         self.gripper_interface = GripperInterface(
@@ -31,6 +44,15 @@ class PuzzlePieceGripperNode(Node):
             callback_group=self.callback_group,
             gripper_command_action_name="gripper_action_controller/gripper_cmd",
         )
+
+        # Scale down velocity and acceleration of joints (percentage of maximum)
+        self.moveit2.max_velocity = 0.5
+        self.moveit2.max_acceleration = 0.5
+
+    # arm helper funct
+    def move_to_configuration(self, joint_positions, stage_name="move"):
+        self.moveit2.move_to_configuration(joint_positions)
+        self.moveit2.wait_until_executed()
 
     # 
     def open_gripper(self):
@@ -85,7 +107,7 @@ def main():
     node.create_rate(10.0).sleep()
 
     # run test pickup sequence
-    node.pick_up_puzzle_piece()
+    node.gripper_puzzle_piece()
 
     rclpy.shutdown()
     executor_thread.join()
